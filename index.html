@@ -15,7 +15,7 @@
         --primary-dark: #0550ae;
         --accent: #1f883d;
       }
-      * ,
+      *,
       *::before,
       *::after {
         box-sizing: border-box;
@@ -185,6 +185,17 @@
         color: var(--muted);
         font-size: 14px;
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
       .theme-toggle {
         padding: 8px 12px;
         border-radius: 8px;
@@ -218,12 +229,12 @@
     <header class="color-bg-default border-bottom">
       <div class="container-lg px-3 py-3 d-flex flex-justify-between flex-items-center">
         <strong class="f3">PublicKernel</strong>
-        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle color theme">Toggle theme</button>
         <nav aria-label="Primary">
           <a class="Link--primary mr-3" href="https://github.com/PublicKernel">Overview</a>
           <a class="Link--primary mr-3" href="https://github.com/orgs/PublicKernel/repositories">Repositories</a>
           <a class="Link--primary" href="https://github.com/orgs/PublicKernel/projects">Initiatives</a>
         </nav>
+        <button id="themeToggle" class="theme-toggle" type="button">Toggle theme</button>
       </div>
     </header>
 
@@ -252,17 +263,17 @@
       <section class="d-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;" aria-label="Organization impact">
         <article class="Box p-3">
           <p class="badge">Impact</p>
-          <p class="stat-number"><span class="counter" data-target="15">0</span>+</p>
+          <p class="stat-number"><span class="counter" data-target="15" aria-hidden="true">0</span>+<span class="sr-only">More than 15 active projects</span></p>
           <p class="color-fg-muted mb-0">Active open-source projects supporting public service delivery.</p>
         </article>
         <article class="Box p-3">
           <p class="badge">Community</p>
-          <p class="stat-number"><span class="counter" data-target="120">0</span>+</p>
+          <p class="stat-number"><span class="counter" data-target="120" aria-hidden="true">0</span>+<span class="sr-only">More than 120 contributors</span></p>
           <p class="color-fg-muted mb-0">Contributors collaborating across policy, design, and engineering.</p>
         </article>
         <article class="Box p-3">
           <p class="badge">Delivery</p>
-          <p class="stat-number"><span class="counter" data-target="99">0</span>%</p>
+          <p class="stat-number"><span class="counter" data-target="99" aria-hidden="true">0</span>%<span class="sr-only">99% uptime target</span></p>
           <p class="color-fg-muted mb-0">Platform uptime target for core systems maintained by our teams.</p>
         </article>
       </section>
@@ -284,7 +295,7 @@
     </main>
 
     <footer class="container-lg px-3 footer">
-      © <span id="year"></span> PublicKernel · Open by default, built for impact.
+      &copy; <span id="year"></span> PublicKernel · Open by default, built for impact.
     </footer>
 
     <script>
@@ -292,34 +303,35 @@
         const toggle = document.getElementById("themeToggle");
         const yearEl = document.getElementById("year");
         const counters = document.querySelectorAll(".counter");
-        const storedTheme = localStorage.getItem("theme");
+        const storedTheme = localStorage.getItem("theme") || "light";
+        const ANIMATION_DURATION_MS = 900;
+        document.body.setAttribute("data-theme", storedTheme);
+        toggle.setAttribute("aria-label", "Switch theme");
 
-        if (storedTheme) {
-          document.body.setAttribute("data-theme", storedTheme);
+        function updateThemeLabel(theme) {
+          const nextTheme = theme === "dark" ? "light" : "dark";
+          toggle.setAttribute("aria-label", "Switch to " + nextTheme + " mode");
         }
 
-        yearEl.textContent = new Date().getFullYear().toString();
+        yearEl.textContent = new Date().getFullYear();
+        updateThemeLabel(storedTheme);
 
         toggle.addEventListener("click", () => {
           const current = document.body.getAttribute("data-theme");
           const next = current === "dark" ? "light" : "dark";
-          if (next === "light") {
-            document.body.removeAttribute("data-theme");
-            localStorage.removeItem("theme");
-            return;
-          }
-          document.body.setAttribute("data-theme", "dark");
-          localStorage.setItem("theme", "dark");
+          document.body.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+          updateThemeLabel(next);
         });
 
         counters.forEach((counter) => {
-          const target = Number(counter.dataset.target || 0);
-          const duration = 900;
+          const target = parseInt(counter.dataset.target || "0", 10);
+          const duration = ANIMATION_DURATION_MS;
           const start = performance.now();
 
           function tick(now) {
             const progress = Math.min((now - start) / duration, 1);
-            counter.textContent = Math.floor(progress * target).toString();
+            counter.textContent = Math.floor(progress * target);
             if (progress < 1) requestAnimationFrame(tick);
           }
 
