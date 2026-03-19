@@ -3,26 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PublicKernel Organization</title>
+    <title>PublicKernel | Open Source for Public Good</title>
     <style>
-      * {
+      :root {
+        --bg: #f6f8fa;
+        --surface: #ffffff;
+        --text: #1f2328;
+        --muted: #59636e;
+        --border: #d1d9e0;
+        --primary: #0969da;
+        --primary-dark: #0550ae;
+        --accent: #1f883d;
+      }
+      * ,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-        background: #f6f8fa;
-        color: #1f2328;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
       }
       .container-lg {
         width: min(1012px, 100% - 32px);
         margin: 0 auto;
       }
       .border-bottom {
-        border-bottom: 1px solid #d1d9e0;
+        border-bottom: 1px solid var(--border);
       }
       .border {
-        border: 1px solid #d1d9e0;
+        border: 1px solid var(--border);
       }
       .px-3 {
         padding-left: 16px;
@@ -54,6 +67,9 @@
       .mb-4 {
         margin-bottom: 24px;
       }
+      .mb-5 {
+        margin-bottom: 32px;
+      }
       .f3 {
         font-size: 20px;
       }
@@ -64,6 +80,10 @@
       .h4 {
         margin-top: 0;
         font-size: 16px;
+      }
+      .h3 {
+        margin: 0;
+        font-size: 22px;
       }
       .d-flex {
         display: flex;
@@ -78,8 +98,9 @@
         display: grid;
       }
       .Link--primary {
-        color: #0969da;
+        color: var(--primary);
         text-decoration: none;
+        font-weight: 500;
       }
       .Link--primary:hover {
         text-decoration: underline;
@@ -88,18 +109,108 @@
         margin-right: 16px;
       }
       .Box {
-        background: #fff;
-        border: 1px solid #d1d9e0;
-        border-radius: 6px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .color-bg-default {
+        background: var(--surface);
       }
       .color-fg-muted {
-        color: #59636e;
+        color: var(--muted);
       }
       .hero-art {
         width: 100%;
-        height: 180px;
-        border-radius: 6px;
-        background: linear-gradient(180deg, #ddf4ff 0%, #f6f8fa 100%);
+        height: 190px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: linear-gradient(120deg, #ddf4ff 0%, #f6f8fa 40%, #dcffe4 100%);
+        overflow: hidden;
+      }
+      .hero-copy {
+        max-width: 640px;
+      }
+      .kicker {
+        margin: 0 0 8px;
+        color: var(--primary-dark);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .button-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid transparent;
+      }
+      .button-primary {
+        background: var(--primary);
+        color: #fff;
+      }
+      .button-primary:hover {
+        background: var(--primary-dark);
+      }
+      .button-secondary {
+        color: var(--text);
+        background: var(--surface);
+        border-color: var(--border);
+      }
+      .button-secondary:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .stat-number {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0 0 6px;
+      }
+      .badge {
+        display: inline-block;
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .footer {
+        padding: 32px 0 40px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .theme-toggle {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .theme-toggle:hover {
+        border-color: var(--primary);
+      }
+      body[data-theme="dark"] {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --text: #e6edf3;
+        --muted: #9ba7b4;
+        --border: #30363d;
+        --primary: #58a6ff;
+        --primary-dark: #79c0ff;
+        --accent: #3fb950;
+      }
+      @media (max-width: 720px) {
+        nav {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -107,20 +218,27 @@
     <header class="color-bg-default border-bottom">
       <div class="container-lg px-3 py-3 d-flex flex-justify-between flex-items-center">
         <strong class="f3">PublicKernel</strong>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle color theme">Toggle theme</button>
         <nav aria-label="Primary">
           <a class="Link--primary mr-3" href="https://github.com/PublicKernel">Overview</a>
           <a class="Link--primary mr-3" href="https://github.com/orgs/PublicKernel/repositories">Repositories</a>
-          <a class="Link--primary" href="https://github.com/orgs/PublicKernel/projects">Projects</a>
+          <a class="Link--primary" href="https://github.com/orgs/PublicKernel/projects">Initiatives</a>
         </nav>
       </div>
     </header>
 
     <main class="container-lg px-3 py-6">
-      <section class="Box p-4 mb-4">
-        <h1 class="h2 mb-2">Build in public, ship with confidence.</h1>
+      <section class="Box p-4 mb-4" aria-labelledby="hero-title">
+        <p class="kicker">Public Interest Technology</p>
+        <h1 id="hero-title" class="h2 mb-2">Building trustworthy digital public infrastructure.</h1>
         <p class="color-fg-muted mb-3">
-          A GitHub-inspired experience for our organization hub.
+          PublicKernel is an open organization focused on civic technology, transparent delivery, and resilient systems
+          that serve communities at scale.
         </p>
+        <div class="button-row mb-3">
+          <a class="button button-primary" href="https://github.com/PublicKernel">Explore our work</a>
+          <a class="button button-secondary" href="https://github.com/orgs/PublicKernel/repositories">View repositories</a>
+        </div>
         <div class="hero-art border">
           <svg viewBox="0 0 800 180" width="100%" height="180" role="img" aria-label="Decorative geometric art">
             <path d="M0 150 L110 80 L220 150 Z" fill="#54aeff"></path>
@@ -131,20 +249,83 @@
         </div>
       </section>
 
-      <section class="d-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+      <section class="d-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;" aria-label="Organization impact">
         <article class="Box p-3">
-          <h2 class="h4 mb-2">Pinned Repository</h2>
-          <p class="color-fg-muted mb-0">demo-repository · HTML · MIT</p>
+          <p class="badge">Impact</p>
+          <p class="stat-number"><span class="counter" data-target="15">0</span>+</p>
+          <p class="color-fg-muted mb-0">Active open-source projects supporting public service delivery.</p>
         </article>
         <article class="Box p-3">
-          <h2 class="h4 mb-2">Open Source First</h2>
-          <p class="color-fg-muted mb-0">Transparent workflows and collaborative delivery.</p>
+          <p class="badge">Community</p>
+          <p class="stat-number"><span class="counter" data-target="120">0</span>+</p>
+          <p class="color-fg-muted mb-0">Contributors collaborating across policy, design, and engineering.</p>
         </article>
         <article class="Box p-3">
-          <h2 class="h4 mb-2">Team Activity</h2>
-          <p class="color-fg-muted mb-0">Track releases, pull requests, and issue progress.</p>
+          <p class="badge">Delivery</p>
+          <p class="stat-number"><span class="counter" data-target="99">0</span>%</p>
+          <p class="color-fg-muted mb-0">Platform uptime target for core systems maintained by our teams.</p>
+        </article>
+      </section>
+
+      <section class="d-grid mb-5" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+        <article class="Box p-3">
+          <h2 class="h4 mb-2">Mission</h2>
+          <p class="color-fg-muted mb-0">Enable governments and civic partners to build open, secure, and reusable digital capabilities.</p>
+        </article>
+        <article class="Box p-3">
+          <h2 class="h4 mb-2">How we work</h2>
+          <p class="color-fg-muted mb-0">Open standards, measurable outcomes, and public collaboration are at the center of every release.</p>
+        </article>
+        <article class="Box p-3">
+          <h2 class="h4 mb-2">Current focus</h2>
+          <p class="color-fg-muted mb-0">Identity, benefits access, and service delivery platforms that improve trust and user experience.</p>
         </article>
       </section>
     </main>
+
+    <footer class="container-lg px-3 footer">
+      © <span id="year"></span> PublicKernel · Open by default, built for impact.
+    </footer>
+
+    <script>
+      (function () {
+        const toggle = document.getElementById("themeToggle");
+        const yearEl = document.getElementById("year");
+        const counters = document.querySelectorAll(".counter");
+        const storedTheme = localStorage.getItem("theme");
+
+        if (storedTheme) {
+          document.body.setAttribute("data-theme", storedTheme);
+        }
+
+        yearEl.textContent = new Date().getFullYear().toString();
+
+        toggle.addEventListener("click", () => {
+          const current = document.body.getAttribute("data-theme");
+          const next = current === "dark" ? "light" : "dark";
+          if (next === "light") {
+            document.body.removeAttribute("data-theme");
+            localStorage.removeItem("theme");
+            return;
+          }
+          document.body.setAttribute("data-theme", "dark");
+          localStorage.setItem("theme", "dark");
+        });
+
+        counters.forEach((counter) => {
+          const target = Number(counter.dataset.target || 0);
+          const duration = 900;
+          const start = performance.now();
+
+          function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            counter.textContent = Math.floor(progress * target).toString();
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+
+          requestAnimationFrame(tick);
+        });
+      })();
+    </script>
   </body>
 </html>
